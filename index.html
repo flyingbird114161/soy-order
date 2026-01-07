@@ -9,22 +9,30 @@
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--bg-cream); margin: 0; padding: 15px; color: #333; }
         .container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .header { text-align: center; border-bottom: 2px solid var(--main-brown); margin-bottom: 20px; padding-bottom: 10px; }
-        .category-title { background: #5d4037; color: white; padding: 8px 15px; border-radius: 5px; margin: 25px 0 12px 0; font-size: 1.05em; font-weight: bold; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        
+        /* 分類標題與介紹文 */
+        .category-section { margin: 25px 0 15px 0; }
+        .category-title { background: #5d4037; color: white; padding: 8px 15px; border-radius: 5px; font-size: 1.05em; font-weight: bold; margin-bottom: 8px; }
+        .category-desc { font-size: 0.85em; color: #666; line-height: 1.6; padding: 0 5px; margin-bottom: 12px; text-align: justify; }
+        
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 12px; margin-bottom: 10px; }
         .product-card { border: 2px solid #eee; border-radius: 10px; background: #fff; padding: 12px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
         .product-card.selected { border-color: var(--main-brown); background-color: #fffaf0; outline: 2px solid var(--main-brown); }
         .product-name { font-weight: bold; color: var(--main-brown); margin: 5px 0; font-size: 0.95em; height: 3em; display: flex; align-items: center; justify-content: center; line-height: 1.3; }
         .product-price { color: #d32f2f; font-weight: bold; font-size: 1.1em; }
         .check-mark { position: absolute; top: 5px; right: 8px; color: var(--main-brown); display: none; font-size: 1.2em; }
         .product-card.selected .check-mark { display: block; }
+
         .order-panel { background: #fdf5e6; padding: 15px; border-radius: 10px; border-left: 8px solid var(--main-brown); display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 25px; }
         .input-group { display: flex; align-items: center; gap: 5px; }
         input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
         .btn-add { background: var(--main-brown); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-weight: bold; flex-grow: 1; height: 42px; }
+        
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95em; }
         th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
         th { background-color: var(--main-brown); color: white; }
         .btn-del { background: #e53935; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+        
         .summary-box { margin-top: 25px; text-align: right; background: #f9f9f9; padding: 20px; border-radius: 10px; border: 1px solid #eee; }
         .final-total { color: #d32f2f; font-size: 1.8em; font-weight: bold; margin-top: 5px; }
         .btn-submit { background: #2e7d32; color: white; border: none; padding: 18px; border-radius: 8px; font-size: 1.3em; cursor: pointer; display: block; margin: 25px auto; width: 100%; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -38,64 +46,79 @@
         <p style="color: #666;">滿 1,500 元享商品 85 折優惠</p>
     </div>
 
-    <div class="category-title">1. 湖鹽有機系列 (台灣本土黑豆)</div>
-    <div class="product-grid">
-        <div class="product-card" onclick="selectProduct(this, '源和有機島油膏', 270)">
-            <div class="check-mark">✔</div><div class="product-name">源和有機島油膏</div><div class="product-price">$270</div>
-        </div>
-        <div class="product-card" onclick="selectProduct(this, '源和有機島油', 270)">
-            <div class="check-mark">✔</div><div class="product-name">源和有機島油</div><div class="product-price">$270</div>
-        </div>
-    </div>
-
-    <div class="category-title">2. 湖鹽有機系列 (進口黑豆)</div>
-    <div class="product-grid">
-        <div class="product-card" onclick="selectProduct(this, '醬心獨蔭有機油膏', 220)">
-            <div class="check-mark">✔</div><div class="product-name">醬心獨蔭有機油膏</div><div class="product-price">$220</div>
-        </div>
-        <div class="product-card" onclick="selectProduct(this, '醬心獨蔭有機清油', 220)">
-            <div class="check-mark">✔</div><div class="product-name">醬心獨蔭有機清油</div><div class="product-price">$220</div>
+    <div class="category-section">
+        <div class="category-title">1. 湖鹽有機系列 (台灣本土黑豆)</div>
+        <div class="category-desc">源和有機島油系列通過有機認證，其原料採用臺灣本島種植的有機黑豆，澳洲湖鹽，遵循傳統古法釀造，經六個月以上於陽光下曝曬發酵熟成，保留醬油的原始風貌，醞釀出每一滴來自這塊寶島的美好與甘醇。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '源和有機島油膏', 270)">
+                <div class="check-mark">✔</div><div class="product-name">源和有機島油膏</div><div class="product-price">$270</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '源和有機島油', 270)">
+                <div class="check-mark">✔</div><div class="product-name">源和有機島油</div><div class="product-price">$270</div>
+            </div>
         </div>
     </div>
 
-    <div class="category-title">3. 天然純釀_進口黑豆 (醬油膏)</div>
-    <div class="product-grid">
-        <div class="product-card" onclick="selectProduct(this, '貴級油膏', 150)">
-            <div class="check-mark">✔</div><div class="product-name">貴級油膏</div><div class="product-price">$150</div>
-        </div>
-        <div class="product-card" onclick="selectProduct(this, '富級油膏', 198)">
-            <div class="check-mark">✔</div><div class="product-name">富級油膏</div><div class="product-price">$198</div>
-        </div>
-        <div class="product-card" onclick="selectProduct(this, '壺底蔭油膏', 310)">
-            <div class="check-mark">✔</div><div class="product-name">壺底蔭油膏</div><div class="product-price">$310</div>
-        </div>
-    </div>
-
-    <div class="category-title">4. 天然純釀_進口黑豆 (清醬油)</div>
-    <div class="product-grid">
-        <div class="product-card" onclick="selectProduct(this, '貴級清油', 150)">
-            <div class="check-mark">✔</div><div class="product-name">貴級清油</div><div class="product-price">$150</div>
-        </div>
-        <div class="product-card" onclick="selectProduct(this, '生抽壺底油', 310)">
-            <div class="check-mark">✔</div><div class="product-name">生抽壺底油</div><div class="product-price">$310</div>
+    <div class="category-section">
+        <div class="category-title">2. 湖鹽有機系列 (進口黑豆)</div>
+        <div class="category-desc">醬心獨蔭系列通過有機認證，其原料採用有機認證黑豆，澳洲湖鹽，除了希望提供消費者健康的飲食概念，更希望藉由無農藥無化肥的產品來減少環境汙染，保持生態平衡善待大地。懷著對大地眾生的恭敬與感恩的心，醞釀出每一滴醬心獨蔭的自然甘醇。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '醬心獨蔭有機油膏', 220)">
+                <div class="check-mark">✔</div><div class="product-name">醬心獨蔭有機油膏</div><div class="product-price">$220</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '醬心獨蔭有機清油', 220)">
+                <div class="check-mark">✔</div><div class="product-name">醬心獨蔭有機清油</div><div class="product-price">$220</div>
+            </div>
         </div>
     </div>
 
-    <div class="category-title">5. 天然純釀 (台灣本土黑豆)</div>
-    <div class="product-grid">
-        <div class="product-card" onclick="selectProduct(this, '本土黑豆油膏', 198)">
-            <div class="check-mark">✔</div><div class="product-name">本土黑豆油膏</div><div class="product-price">$198</div>
+    <div class="category-section">
+        <div class="category-title">3. 天然純釀_進口黑豆 (醬油膏)</div>
+        <div class="category-desc">天然純釀醬油膏系列使用具無農藥殘留檢驗報告的黑豆，依"原汁與水的比例"，可分為不同等級。醬油膏係由醬油與天然糯米熬煮而成。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '貴級油膏', 150)">
+                <div class="check-mark">✔</div><div class="product-name">貴級油膏</div><div class="product-price">$150</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '富級油膏', 198)">
+                <div class="check-mark">✔</div><div class="product-name">富級油膏</div><div class="product-price">$198</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '壺底蔭油膏', 310)">
+                <div class="check-mark">✔</div><div class="product-name">壺底蔭油膏</div><div class="product-price">$310</div>
+            </div>
         </div>
-        <div class="product-card" onclick="selectProduct(this, '本土黑豆清油', 198)">
-            <div class="check-mark">✔</div><div class="product-name">本土黑豆清油</div><div class="product-price">$198</div>
+    </div>
+
+    <div class="category-section">
+        <div class="category-title">4. 天然純釀_進口黑豆 (清醬油)</div>
+        <div class="category-desc">天然純釀醬油系列使用具無農藥殘留檢驗報告的黑豆，依"原汁與水的比例"，可分為不同等級。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '貴級清油', 150)">
+                <div class="check-mark">✔</div><div class="product-name">貴級清油</div><div class="product-price">$150</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '生抽壺底油', 310)">
+                <div class="check-mark">✔</div><div class="product-name">生抽壺底油</div><div class="product-price">$310</div>
+            </div>
         </div>
-        <div class="product-card" onclick="selectProduct(this, '無加糖臺灣黑豆醬油', 198)">
-            <div class="check-mark">✔</div><div class="product-name">無加糖臺灣黑豆醬油</div><div class="product-price">$198</div>
+    </div>
+
+    <div class="category-section">
+        <div class="category-title">5. 天然純釀 (台灣本土黑豆)</div>
+        <div class="category-desc">本土黑豆系列係採用友善環境種植的台灣本土黑豆，栽種過程不使用農藥、化學肥料、除草劑。除了希望提供消費者健康的飲食概念，也希望藉由友善環境的在地耕作，光復這片土地原有的健康清淨，也拉近人與土地的距離。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '本土黑豆油膏', 198)">
+                <div class="check-mark">✔</div><div class="product-name">本土黑豆油膏</div><div class="product-price">$198</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '本土黑豆清油', 198)">
+                <div class="check-mark">✔</div><div class="product-name">本土黑豆清油</div><div class="product-price">$198</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '無加糖臺灣黑豆醬油', 198)">
+                <div class="check-mark">✔</div><div class="product-name">無加糖臺灣黑豆醬油</div><div class="product-price">$198</div>
+            </div>
         </div>
     </div>
 
     <div class="order-panel">
-        <div class="input-group"><input type="text" id="selectedName" readonly placeholder="請選品項"></div>
+        <div class="input-group"><input type="text" id="selectedName" readonly placeholder="請點選品項"></div>
         <div class="input-group"><input type="text" id="buyerName" placeholder="姓名"></div>
         <div class="input-group"><label>數量</label><input type="number" id="buyQty" min="1" value="1" style="width: 60px;"></div>
         <button class="btn-add" onclick="addOrder()">加入統計</button>
@@ -119,7 +142,7 @@
 <script>
     let selectedPrice = 0;
     let orders = [];
-    // 已自動填入您的 SCRIPT_URL
+    // 已填入您的收件網址
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbypEPLR7_Yc2zLwWGTzSdMjQkcr1mcaLPvBn27FfMkRu5niCfQXFV_oWc11vh8kjYFN5A/exec'; 
 
     function selectProduct(element, name, price) {
@@ -173,11 +196,11 @@
         const data = orders.map(o => ({ bName: o.bName, pName: o.pName, qty: o.qty, subtotal: o.price * o.qty }));
         fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
         .then(() => {
-            alert("下單成功！資料已彙整至後台。");
+            alert("下單成功！資料已彙整至後台試算表。");
             orders = []; renderTable(); calculate();
             btn.innerText = "✅ 確認下單並傳送資料"; btn.disabled = false;
         }).catch(() => {
-            alert("傳送失敗");
+            alert("傳送失敗，請檢查網路連線。");
             btn.disabled = false;
         });
     }
