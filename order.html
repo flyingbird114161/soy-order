@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑糖芭比蓮霧快閃團</title>
+    <style>
+        body { font-family: "Microsoft JhengHei", sans-serif; background-color: #fce4ec; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #c62828; text-align: center; margin-bottom: 10px; }
+        .price-tag { text-align: center; font-size: 1.5em; color: #e53935; font-weight: bold; margin-bottom: 20px; }
+        .features { background: #ffebee; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .features li { margin-bottom: 8px; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        .total-area { margin-top: 20px; padding: 15px; background: #333; color: white; border-radius: 10px; text-align: center; font-size: 1.2em; }
+        button { width: 100%; padding: 15px; background-color: #00c300; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+        button:hover { background-color: #00a400; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        .note { font-size: 0.8em; color: #666; margin-top: 15px; text-align: center; }
+        .loading { display: none; text-align: center; margin-top: 10px; color: #e53935; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🍎 蓮霧界的 LV「黑糖芭比」</h1>
+    <div class="price-tag">產地快閃價：$560 / 箱 (含運)</div>
+    
+    <div class="features">
+        <b>商品特色：</b>
+        <ul>
+            <li>🏆 <b>LV級品種：</b> 碩大、脆甜、不酸澀！</li>
+            <li>💰 <b>產地價：</b> 市價一斤$300起，團購價一斤$100。</li>
+            <li>📦 <b>規格：</b> 5斤/箱 (每箱含運$560)。</li>
+        </ul>
+    </div>
+
+    <form id="orderForm">
+        <label for="name">您的姓名：</label>
+        <input type="text" id="name" name="name" placeholder="請輸入姓名" required>
+
+        <label for="quantity">訂購箱數 (5斤/箱)：</label>
+        <select id="quantity" name="quantity" onchange="calculateTotal()">
+            <option value="1">1 箱</option>
+            <option value="2">2 箱</option>
+            <option value="3">3 箱</option>
+            <option value="4">4 箱</option>
+            <option value="5">5 箱</option>
+            <option value="6">6 箱</option>
+            <option value="7">7 箱</option>
+            <option value="8">8 箱</option>
+            <option value="9">9 箱</option>
+            <option value="10">10 箱</option>
+        </select>
+
+        <input type="hidden" id="totalInput" name="total" value="560">
+
+        <div class="total-area">
+            總金額：<span id="totalPrice">$560</span>
+        </div>
+
+        <button type="button" id="submitBtn" onclick="submitOrder()">送出訂單</button>
+        <div class="loading" id="loadingMsg">資料傳送中，請稍候...</div>
+    </form>
+    
+    <div class="note">
+        🛑 結單時間：1/9（週五）晚上 8:00<br>
+        送出後，系統會自動登記到經理的試算表。
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // ✅ 已幫您填入剛剛提供的網址
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbx_ILcDjFXl7YO0s9E3fe0Uc3sc3r5IZ0lBZxRhA6iaQG1wGOblLSR46jbdfqfdpgJw/exec'; 
+    // ==========================================
+
+    function calculateTotal() {
+        const pricePerBox = 560;
+        const quantity = document.getElementById("quantity").value;
+        const total = pricePerBox * quantity;
+        document.getElementById("totalPrice").innerText = "$" + total.toLocaleString();
+        document.getElementById("totalInput").value = total;
+    }
+
+    function submitOrder() {
+        const name = document.getElementById("name").value;
+        if (!name) { alert("請填寫姓名喔！"); return; }
+        
+        const form = document.getElementById('orderForm');
+        const btn = document.getElementById('submitBtn');
+        const loading = document.getElementById('loadingMsg');
+        
+        // 鎖定按鈕避免重複送出
+        btn.disabled = true;
+        btn.innerText = "處理中...";
+        loading.style.display = "block";
+
+        const formData = new FormData(form);
+
+        fetch(scriptURL, { method: 'POST', body: formData })
+            .then(response => {
+                alert("🎉 訂購成功！資料已傳送給經理。");
+                // 重置表單
+                form.reset();
+                calculateTotal();
+                btn.disabled = false;
+                btn.innerText = "送出訂單";
+                loading.style.display = "none";
+            })
+            .catch(error => {
+                alert("❌ 發生錯誤，請截圖給經理！\n" + error.message);
+                btn.disabled = false;
+                btn.innerText = "送出訂單";
+                loading.style.display = "none";
+            });
+    }
+</script>
+
+</body>
+</html>
