@@ -70,4 +70,123 @@
             <div class="check-mark">✔</div><div class="product-name">貴級油膏</div><div class="product-price">$150</div>
         </div>
         <div class="product-card" onclick="selectProduct(this, '富級油膏', 198)">
-            <div class="check-mark">✔</div><div class="product-name">富級油膏</div><div class
+            <div class="check-mark">✔</div><div class="product-name">富級油膏</div><div class="product-price">$198</div>
+        </div>
+        <div class="product-card" onclick="selectProduct(this, '壺底蔭油膏', 310)">
+            <div class="check-mark">✔</div><div class="product-name">壺底蔭油膏</div><div class="product-price">$310</div>
+        </div>
+    </div>
+
+    <div class="category-title">4. 天然純釀_進口黑豆 (清醬油)</div>
+    <div class="product-grid">
+        <div class="product-card" onclick="selectProduct(this, '貴級清油', 150)">
+            <div class="check-mark">✔</div><div class="product-name">貴級清油</div><div class="product-price">$150</div>
+        </div>
+        <div class="product-card" onclick="selectProduct(this, '生抽壺底油', 310)">
+            <div class="check-mark">✔</div><div class="product-name">生抽壺底油</div><div class="product-price">$310</div>
+        </div>
+    </div>
+
+    <div class="category-title">5. 天然純釀 (台灣本土黑豆)</div>
+    <div class="product-grid">
+        <div class="product-card" onclick="selectProduct(this, '本土黑豆油膏', 198)">
+            <div class="check-mark">✔</div><div class="product-name">本土黑豆油膏</div><div class="product-price">$198</div>
+        </div>
+        <div class="product-card" onclick="selectProduct(this, '本土黑豆清油', 198)">
+            <div class="check-mark">✔</div><div class="product-name">本土黑豆清油</div><div class="product-price">$198</div>
+        </div>
+        <div class="product-card" onclick="selectProduct(this, '無加糖臺灣黑豆醬油', 198)">
+            <div class="check-mark">✔</div><div class="product-name">無加糖臺灣黑豆醬油</div><div class="product-price">$198</div>
+        </div>
+    </div>
+
+    <div class="order-panel">
+        <div class="input-group"><input type="text" id="selectedName" readonly placeholder="請點選品項"></div>
+        <div class="input-group"><input type="text" id="buyerName" placeholder="姓名"></div>
+        <div class="input-group"><label>數量</label><input type="number" id="buyQty" min="1" value="1" style="width: 60px;"></div>
+        <button class="btn-add" onclick="addOrder()">加入統計</button>
+    </div>
+
+    <table>
+        <thead><tr><th>訂購人</th><th>品項</th><th>數量</th><th>小計</th><th>操作</th></tr></thead>
+        <tbody id="orderList"></tbody>
+    </table>
+
+    <div class="summary-box">
+        <div>總瓶數：<span id="totalBottles">0</span> 瓶</div>
+        <div id="discountInfo" style="color: green; display: none;">符合 1,500 元 85 折：-NT$ <span id="discountAmt">0</span></div>
+        <hr>
+        <div class="final-total">應付總計：NT$ <span id="finalTotal">0</span></div>
+    </div>
+
+    <button id="submitBtn" class="btn-submit" onclick="uploadToGoogle()">✅ 確認下單並傳送資料</button>
+</div>
+
+<script>
+    let selectedPrice = 0;
+    let orders = [];
+    const SCRIPT_URL = '您的_GOOGLE_SCRIPT_URL'; 
+
+    function selectProduct(element, name, price) {
+        document.querySelectorAll('.product-card').forEach(card => card.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('selectedName').value = name;
+        selectedPrice = price;
+    }
+
+    function addOrder() {
+        const pName = document.getElementById('selectedName').value;
+        const bName = document.getElementById('buyerName').value.trim();
+        const qty = parseInt(document.getElementById('buyQty').value);
+        if (!pName || !bName) { alert("請選品項並填寫姓名"); return; }
+        orders.push({ bName, pName, price: selectedPrice, qty });
+        renderTable();
+        calculate();
+        document.getElementById('buyerName').value = bName; 
+    }
+
+    function deleteOrder(index) {
+        orders.splice(index, 1);
+        renderTable();
+        calculate();
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('orderList');
+        tbody.innerHTML = "";
+        orders.forEach((o, index) => {
+            const row = tbody.insertRow();
+            row.innerHTML = `<td>${o.bName}</td><td>${o.pName}</td><td>${o.qty}</td><td>$${(o.price * o.qty).toLocaleString()}</td><td><button class="btn-del" onclick="deleteOrder(${index})">刪除</button></td>`;
+        });
+    }
+
+    function calculate() {
+        let rawTotal = 0, totalQty = 0;
+        orders.forEach(o => { rawTotal += (o.price * o.qty); totalQty += o.qty; });
+        let discount = (rawTotal >= 1500) ? Math.round(rawTotal * 0.15) : 0;
+        document.getElementById('discountInfo').style.display = (discount > 0) ? "block" : "none";
+        document.getElementById('discountAmt').innerText = discount.toLocaleString();
+        document.getElementById('totalBottles').innerText = totalQty;
+        document.getElementById('finalTotal').innerText = (rawTotal - discount).toLocaleString();
+    }
+
+    function uploadToGoogle() {
+        if (orders.length === 0) { alert("尚未加入品項"); return; }
+        if (SCRIPT_URL.includes('您的_')) { alert("請記得填入後台網址！"); return; }
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "資料傳送中...";
+        btn.disabled = true;
+        const data = orders.map(o => ({ bName: o.bName, pName: o.pName, qty: o.qty, subtotal: o.price * o.qty }));
+        fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
+        .then(() => {
+            alert("下單成功！資料已彙整至後台。");
+            orders = []; renderTable(); calculate();
+            btn.innerText = "✅ 確認下單並傳送資料"; btn.disabled = false;
+        }).catch(() => {
+            alert("傳送失敗");
+            btn.disabled = false;
+        });
+    }
+</script>
+</body>
+</html>
