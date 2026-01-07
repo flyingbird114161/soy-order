@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>陳源和醬油 - 團購下單系統</title>
+    <style>
+        :root { --main-brown: #8b4513; --bg-cream: #f4f1ea; }
+        body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--bg-cream); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        
+        .header { text-align: center; border-bottom: 2px solid var(--main-brown); margin-bottom: 25px; padding-bottom: 10px; }
+        .promo-banner { background: #fffaf0; padding: 15px; border: 1px solid #e0d6c3; border-radius: 10px; margin-bottom: 25px; font-size: 0.9em; line-height: 1.6; }
+        
+        /* 產品點選區 */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .product-card { border: 2px solid #eee; border-radius: 10px; background: #fff; padding: 12px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
+        .product-card:hover { border-color: var(--main-brown); }
+        .product-card.selected { border-color: var(--main-brown); background-color: #fffaf0; outline: 2px solid var(--main-brown); }
+        .product-name { font-weight: bold; color: var(--main-brown); margin: 8px 0 4px 0; }
+        .product-price { color: #d32f2f; font-weight: bold; margin-bottom: 8px; }
+        .product-specs { font-size: 0.75em; color: #666; text-align: left; border-top: 1px solid #eee; padding-top: 5px; }
+        .check-mark { position: absolute; top: 5px; right: 8px; color: var(--main-brown); font-size: 1.2em; display: none; }
+        .product-card.selected .check-mark { display: block; }
+
+        /* 下單操作區 */
+        .order-panel { background: #fdf5e6; padding: 20px; border-radius: 10px; border-left: 8px solid var(--main-brown); display: flex; flex-wrap: wrap; gap: 15px; align-items: center; margin-bottom: 30px; }
+        .input-group { display: flex; align-items: center; gap: 8px; }
+        input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-add { background: var(--main-brown); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-weight: bold; }
+        
+        /* 統計表 */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background-color: var(--main-brown); color: white; }
+        
+        .summary-box { margin-top: 20px; text-align: right; background: #f9f9f9; padding: 20px; border-radius: 10px; line-height: 1.8; }
+        .final-total { color: #d32f2f; font-size: 1.6em; font-weight: bold; }
+        
+        /* 送出按鈕 */
+        .btn-submit { background: #28a745; color: white; border: none; padding: 15px 40px; border-radius: 5px; font-size: 1.2em; cursor: pointer; display: block; margin: 20px auto; width: 100%; max-width: 400px; font-weight: bold; }
+        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>陳源和醬油 團購下單系統</h1>
+        <p>點選圖片選購品項 ‧ 系統自動計算優惠與運費</p>
+    </div>
+
+    <div class="promo-banner">
+        <strong>💡 購物提醒：</strong><br>
+        1. 訂購滿 <span style="color:red">1,500元</span> 以上，享商品 <span style="color:red">85折</span> 優惠 (運費另計)。<br>
+        2. 運費：12瓶內 $170 / 13-24瓶 $240 / 25瓶以上每打+$120。<br>
+        3. 貨到付款手續費：12瓶內 $30 / 13瓶以上 $60。
+    </div>
+
+    <div class="product-grid">
+        <div class="product-card" onclick="selectProduct(this, '壺底蔭油膏', 310)">
+            <div class="check-mark">✔</div>
+            <div style="font-size: 0.8em; color: #999;">【點此選擇】</div>
+            <div class="product-name">壺底蔭油膏</div>
+            <div class="product-price">$310</div>
+            <div class="product-specs">濃度/豆香/鹽度：最高<br>用量：最少</div>
+        </div>
+        <div class="product-card" onclick="selectProduct(this, '源和有機島油', 270)">
+            <div class="check-mark">✔</div>
+            <div style="font-size: 0.8em; color: #999;">【點此選擇】</div>
+            <div class="product-name">源和有機島油</div>
+            <div class="product-price">$270</div>
+            <div class="product-specs">濃度/豆香：中高<br>鹽度/用量：中</div>
+        </div>
+        <div class="product-card" onclick="selectProduct(this, '本土黑豆清油', 198)">
+            <div class="check-mark">✔</div>
+            <div style="font-size: 0.8em; color: #999;">【點此選擇】</div>
+            <div class="product-name">本土黑豆清油</div>
+            <div class="product-price">$198</div>
+            <div class="product-specs">濃度/豆香/鹽度：中<br>用量：中</div>
+        </div>
+        <div class="product-card" onclick="selectProduct(this, '醬心獨蔭有機清油', 220)">
+            <div class="check-mark">✔</div>
+            <div style="font-size: 0.8em; color: #999;">【點此選擇】</div>
+            <div class="product-name">醬心獨蔭有機清油</div>
+            <div class="product-price">$220</div>
+            <div class="product-specs">濃度/豆香：中高<br>鹽度/用量：中</div>
+        </div>
+        <div class="product-card" onclick="selectProduct(this, '無加糖臺灣黑豆醬油', 198)">
+            <div class="check-mark">✔</div>
+            <div style="font-size: 0.8em; color: #999;">【點此選擇】</div>
+            <div class="product-name">無加糖黑豆醬油</div>
+            <div class="product-price">$198</div>
+            <div class="product-specs">濃度/豆香/鹽度：中高<br>用量：中高</div>
+        </div>
+        <div class="product-card" onclick="selectProduct(this, '辣醬油膏(隨身瓶)', 70)">
+            <div class="check-mark">✔</div>
+            <div style="font-size: 0.8em; color: #999;">【點此選擇】</div>
+            <div class="product-name">辣醬油膏(隨身瓶)</div>
+            <div class="product-price">$70</div>
+            <div class="product-specs">口感：辣香適中<br>特色：無添加</div>
+        </div>
+    </div>
+
+    <div class="order-panel">
+        <div class="input-group">
+            <label>已選品項：</label>
+            <input type="text" id="selectedName" readonly placeholder="請點選上方產品">
+        </div>
+        <div class="input-group">
+            <label>訂購人：</label>
+            <input type="text" id="buyerName" placeholder="您的姓名">
+        </div>
+        <div class="input-group">
+            <label>數量：</label>
+            <input type="number" id="buyQty" min="1" value="1" style="width: 50px;">
+        </div>
+        <button class="btn-add" onclick="addOrder()">加入統計</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>訂購人</th>
+                <th>品項</th>
+                <th>數量</th>
+                <th>小計</th>
+            </tr>
+        </thead>
+        <tbody id="orderList"></tbody>
+    </table>
+
+    <div class="summary-box">
+        <div>商品總額：NT$ <span id="rawTotal">0</span></div>
+        <div id="discountInfo" style="color: green; display: none;">符合 1,500 元 85 折優惠：-NT$ <span id="discountAmt">0</span></div>
+        <div>總瓶數：<span id="totalBottles">0</span> 瓶</div>
+        <div>預計運費：NT$ <span id="shipFee">0</span> | 手續費：NT$ <span id="payFee">0</span></div>
+        <hr>
+        <div class="final-total">應付總計：NT$ <span id="finalTotal">0</span></div>
+    </div>
+
+    <button id="submitBtn" class="btn-submit" onclick="uploadToGoogle()">✅ 確認下單並傳送資料</button>
+</div>
+
+<script>
+    let selectedPrice = 0;
+    let orders = [];
+    const SCRIPT_URL = '
+https://script.google.com/macros/s/AKfycbwJunydWRHIwlSYRCNlJnXTH7HPo9d_zFvZmr9QXcV2m-LEbE237c4GSu74skDxmigzVw/exec;
+
+
+    function selectProduct(element, name, price) {
+        document.querySelectorAll('.product-card').forEach(card => card.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('selectedName').value = name;
+        selectedPrice = price;
+    }
+
+    function addOrder() {
+        const pName = document.getElementById('selectedName').value;
+        const bName = document.getElementById('buyerName').value.trim();
+        const qty = parseInt(document.getElementById('buyQty').value);
+
+        if (!pName) { alert("請先點選上方產品！"); return; }
+        if (!bName || isNaN(qty) || qty <= 0) { alert("請填寫姓名與數量！"); return; }
+
+        orders.push({ bName, pName, price: selectedPrice, qty });
+        renderTable();
+        calculate();
+        document.getElementById('buyerName').value = "";
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('orderList');
+        tbody.innerHTML = "";
+        orders.forEach(o => {
+            const row = tbody.insertRow();
+            row.innerHTML = `<td>${o.bName}</td><td>${o.pName}</td><td>${o.qty}</td><td>$${(o.price * o.qty).toLocaleString()}</td>`;
+        });
+    }
+
+    function calculate() {
+        let rawTotal = 0, totalQty = 0;
+        orders.forEach(o => { rawTotal += (o.price * o.qty); totalQty += o.qty; });
+
+        let discount = (rawTotal >= 1500) ? Math.round(rawTotal * 0.15) : 0;
+        document.getElementById('discountInfo').style.display = (discount > 0) ? "block" : "none";
+        
+        let shipping = 0;
+        if (totalQty > 0) {
+            if (totalQty <= 12) shipping = 170;
+            else if (totalQty <= 24) shipping = 240;
+            else shipping = 240 + Math.ceil((totalQty - 24) / 12) * 120;
+        }
+
+        let payFee = (totalQty > 0) ? (totalQty <= 12 ? 30 : 60) : 0;
+
+        document.getElementById('rawTotal').innerText = rawTotal.toLocaleString();
+        document.getElementById('discountAmt').innerText = discount.toLocaleString();
+        document.getElementById('totalBottles').innerText = totalQty;
+        document.getElementById('shipFee').innerText = shipping.toLocaleString();
+        document.getElementById('payFee').innerText = payFee.toLocaleString();
+        document.getElementById('finalTotal').innerText = (rawTotal - discount + shipping + payFee).toLocaleString();
+    }
+
+    function uploadToGoogle() {
+        if (orders.length === 0) { alert("請先加入商品到訂單！"); return; }
+        if (SCRIPT_URL === '你的_GOOGLE_SCRIPT_URL') { alert("請先在程式碼中設定 Google Script URL 喔！"); return; }
+
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "資料傳送中...";
+        btn.disabled = true;
+
+        const data = orders.map(o => ({
+            bName: o.bName,
+            pName: o.pName,
+            qty: o.qty,
+            subtotal: o.price * o.qty
+        }));
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(() => {
+            alert("下單成功！資料已彙整至後台。");
+            orders = [];
+            renderTable();
+            calculate();
+            btn.innerText = "✅ 確認下單並傳送資料";
+            btn.disabled = false;
+        }).catch(err => {
+            alert("傳送失敗，請稍後再試。");
+            btn.disabled = false;
+        });
+    }
+</script>
+
+</body>
+</html>
