@@ -9,10 +9,7 @@
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--bg-cream); margin: 0; padding: 15px; color: #333; }
         .container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .header { text-align: center; border-bottom: 2px solid var(--main-brown); margin-bottom: 20px; padding-bottom: 10px; }
-        
-        /* 分類標題樣式 */
         .category-title { background: #5d4037; color: white; padding: 8px 15px; border-radius: 5px; margin: 25px 0 12px 0; font-size: 1.05em; font-weight: bold; }
-        
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 12px; margin-bottom: 20px; }
         .product-card { border: 2px solid #eee; border-radius: 10px; background: #fff; padding: 12px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
         .product-card.selected { border-color: var(--main-brown); background-color: #fffaf0; outline: 2px solid var(--main-brown); }
@@ -20,17 +17,14 @@
         .product-price { color: #d32f2f; font-weight: bold; font-size: 1.1em; }
         .check-mark { position: absolute; top: 5px; right: 8px; color: var(--main-brown); display: none; font-size: 1.2em; }
         .product-card.selected .check-mark { display: block; }
-
         .order-panel { background: #fdf5e6; padding: 15px; border-radius: 10px; border-left: 8px solid var(--main-brown); display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 25px; }
         .input-group { display: flex; align-items: center; gap: 5px; }
         input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
         .btn-add { background: var(--main-brown); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-weight: bold; flex-grow: 1; height: 42px; }
-        
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95em; }
         th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
         th { background-color: var(--main-brown); color: white; }
         .btn-del { background: #e53935; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
-        
         .summary-box { margin-top: 25px; text-align: right; background: #f9f9f9; padding: 20px; border-radius: 10px; border: 1px solid #eee; }
         .final-total { color: #d32f2f; font-size: 1.8em; font-weight: bold; margin-top: 5px; }
         .btn-submit { background: #2e7d32; color: white; border: none; padding: 18px; border-radius: 8px; font-size: 1.3em; cursor: pointer; display: block; margin: 25px auto; width: 100%; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -101,7 +95,7 @@
     </div>
 
     <div class="order-panel">
-        <div class="input-group"><input type="text" id="selectedName" readonly placeholder="請點選品項"></div>
+        <div class="input-group"><input type="text" id="selectedName" readonly placeholder="請選品項"></div>
         <div class="input-group"><input type="text" id="buyerName" placeholder="姓名"></div>
         <div class="input-group"><label>數量</label><input type="number" id="buyQty" min="1" value="1" style="width: 60px;"></div>
         <button class="btn-add" onclick="addOrder()">加入統計</button>
@@ -125,7 +119,8 @@
 <script>
     let selectedPrice = 0;
     let orders = [];
-    const SCRIPT_URL = '您的_GOOGLE_SCRIPT_URL'; 
+    // 已自動填入您的 SCRIPT_URL
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbypEPLR7_Yc2zLwWGTzSdMjQkcr1mcaLPvBn27FfMkRu5niCfQXFV_oWc11vh8kjYFN5A/exec'; 
 
     function selectProduct(element, name, price) {
         document.querySelectorAll('.product-card').forEach(card => card.classList.remove('selected'));
@@ -172,7 +167,6 @@
 
     function uploadToGoogle() {
         if (orders.length === 0) { alert("尚未加入品項"); return; }
-        if (SCRIPT_URL.includes('您的_')) { alert("請記得填入後台網址！"); return; }
         const btn = document.getElementById('submitBtn');
         btn.innerText = "資料傳送中...";
         btn.disabled = true;
