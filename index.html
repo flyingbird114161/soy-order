@@ -10,12 +10,11 @@
         .container { max-width: 900px; margin: auto; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .header { text-align: center; border-bottom: 2px solid var(--main-brown); margin-bottom: 15px; padding-bottom: 5px; }
         
-        /* 產品分類區縮小優化 */
         .category-section { margin: 15px 0 10px 0; }
         .category-title { background: #5d4037; color: white; padding: 5px 12px; border-radius: 5px; font-size: 0.95em; font-weight: bold; margin-bottom: 5px; }
         .category-desc { font-size: 0.8em; color: #666; line-height: 1.4; padding: 0 5px; margin-bottom: 8px; text-align: justify; }
         
-        /* 縮小勾選卡片空間 */
+        /* 縮小勾選卡片 */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-bottom: 5px; }
         .product-card { border: 1px solid #ddd; border-radius: 8px; background: #fff; padding: 8px; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
         .product-card.selected { border-color: var(--main-brown); background-color: #fffaf0; outline: 1.5px solid var(--main-brown); }
@@ -24,13 +23,11 @@
         .check-mark { position: absolute; top: 2px; right: 5px; color: var(--main-brown); display: none; font-size: 1em; }
         .product-card.selected .check-mark { display: block; }
         
-        /* 下單面板 */
         .order-panel { background: #fdf5e6; padding: 12px; border-radius: 10px; border-left: 6px solid var(--main-brown); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 20px 0; }
         .input-group { display: flex; align-items: center; gap: 5px; }
         input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
         .btn-add { background: var(--main-brown); color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 5px; font-weight: bold; flex-grow: 1; height: 38px; }
         
-        /* 修改操作步驟 (移至清單附近) */
         .instruction-box { background: #fffde7; border: 1px solid #fbc02d; padding: 10px; border-radius: 8px; margin: 20px 0 10px 0; font-size: 0.85em; line-height: 1.5; }
         .instruction-box strong { color: #d32f2f; }
         
@@ -112,7 +109,7 @@
 
     <div class="category-section">
         <div class="category-title">5. 天然純釀 (台灣本土黑豆)</div>
-        <div class="category-desc">採用友善環境種植的台灣本土黑豆，不使用農藥與化學肥料。</div>
+        <div class="category-desc">採用友善環境種植的台灣本土黑豆。</div>
         <div class="product-grid">
             <div class="product-card" onclick="selectProduct(this, '本土黑豆油膏', 198)">
                 <div class="check-mark">✔</div><div class="product-name">本土黑豆油膏</div><div class="product-price">$198</div>
@@ -128,7 +125,7 @@
 
     <div class="category-section">
         <div class="category-title">6. 辣醬油膏</div>
-        <div class="category-desc">嚴選天然雞心辣椒粉與古法黑豆醬油膏慢火熬煮。</div>
+        <div class="category-desc">嚴選天然雞心辣椒粉。</div>
         <div class="product-grid">
             <div class="product-card" onclick="selectProduct(this, '辣醬油膏', 100)">
                 <div class="check-mark">✔</div><div class="product-name">辣醬油膏</div><div class="product-price">$100</div>
@@ -141,7 +138,7 @@
 
     <div class="category-section">
         <div class="category-title">7. 手工純釀醬菜</div>
-        <div class="category-desc">精選天然食材製作，無人工添加物與防腐劑。</div>
+        <div class="category-desc">精選天然食材製作。</div>
         <div class="product-grid">
             <div class="product-card" onclick="selectProduct(this, '薑油 (經典瓶)', 270)">
                 <div class="check-mark">✔</div><div class="product-name">薑油 (經典瓶)</div><div class="product-price">$270</div>
@@ -197,7 +194,8 @@
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbypEPLR7_Yc2zLwWGTzSdMjQkcr1mcaLPvBn27FfMkRu5niCfQXFV_oWc11vh8kjYFN5A/exec';
+    // 已更新為您提供的最新 SCRIPT_URL
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzketijpUZL2YA9NPHigcM0L0-4eIhayg-aSV2Pvfho-1qAtvWwflEzoBPDHrapDK7O-g/exec';
 
     let selectedPrice = 0;
     let orders = [];
@@ -248,7 +246,8 @@
 
     function fetchHistory() {
         const historyBody = document.getElementById('historyList');
-        fetch(SCRIPT_URL)
+        // 增加一個隨機參數防止快取
+        fetch(SCRIPT_URL + "?nocache=" + new Date().getTime())
             .then(res => res.json())
             .then(data => {
                 historyBody.innerHTML = "";
@@ -262,7 +261,10 @@
                     row.innerHTML = `<td>${o.bName}</td><td>${o.pName}</td><td>${o.qty}</td><td class="note-text">${o.note}</td><td><small>${date}</small></td>`;
                 });
             })
-            .catch(err => { historyBody.innerHTML = "<tr><td colspan='5'>載入失敗</td></tr>"; });
+            .catch(err => { 
+                console.error(err);
+                historyBody.innerHTML = "<tr><td colspan='5'>載入失敗，請確認 Apps Script 部署設為「所有人」</td></tr>"; 
+            });
     }
 
     function uploadToGoogle() {
