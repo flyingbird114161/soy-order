@@ -28,4 +28,263 @@
         input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
         .btn-add { background: var(--main-brown); color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 5px; font-weight: bold; flex-grow: 1; height: 38px; }
         
-        .instruction-box { background: #fffde7; border: 1px solid #fbc02d; padding: 10px; border-radius: 8px; margin: 20px 0 10px 0; font-size:
+        .instruction-box { background: #fffde7; border: 1px solid #fbc02d; padding: 10px; border-radius: 8px; margin: 20px 0 10px 0; font-size: 0.85em; line-height: 1.5; }
+        .instruction-box strong { color: #d32f2f; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 0.88em; }
+        th, td { border: 1px solid #ddd; padding: 8px 4px; text-align: center; }
+        th { background-color: var(--main-brown); color: white; }
+        .btn-del { background: #e53935; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
+        
+        .summary-box { margin-top: 15px; text-align: right; background: #f9f9f9; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
+        .final-total { color: #d32f2f; font-size: 1.5em; font-weight: bold; margin-top: 5px; }
+        .btn-submit { background: #2e7d32; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1.1em; cursor: pointer; display: block; margin: 20px auto; width: 100%; font-weight: bold; }
+        
+        .history-section { margin-top: 40px; border-top: 2px double var(--main-brown); padding-top: 15px; }
+        .note-text { color: #d32f2f; font-size: 0.8em; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>陳源和醬油 團購系統</h1>
+        <p style="color: #666; font-size: 0.9em;">滿 1,500 元享商品 85 折優惠</p>
+    </div>
+
+    <div class="category-section">
+        <div class="category-title">1. 湖鹽有機系列 (台灣本土黑豆)</div>
+        <div class="category-desc">源和有機島油系列通過有機認證，其原料採用臺灣本島種植的有機黑豆，澳洲湖鹽，遵循傳統古法釀造。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '源和有機島油膏', 270)">
+                <div class="check-mark">✔</div><div class="product-name">源和有機島油膏</div><div class="product-price">$270</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '源和有機島油', 270)">
+                <div class="check-mark">✔</div><div class="product-name">源和有機島油</div><div class="product-price">$270</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-section">
+        <div class="category-title">2. 湖鹽有機系列 (進口黑豆)</div>
+        <div class="category-desc">醬心獨蔭系列通過有機認證，採用有機認證黑豆，澳洲湖鹽。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '醬心獨蔭有機油膏', 220)">
+                <div class="check-mark">✔</div><div class="product-name">醬心獨蔭有機油膏</div><div class="product-price">$220</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '醬心獨蔭有機清油', 220)">
+                <div class="check-mark">✔</div><div class="product-name">醬心獨蔭有機清油</div><div class="product-price">$220</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-section">
+        <div class="category-title">3. 天然純釀_進口黑豆 (醬油膏)</div>
+        <div class="category-desc">使用無農藥殘留檢驗報告黑豆，由醬油與天然糯米熬煮而成。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '貴級油膏', 150)">
+                <div class="check-mark">✔</div><div class="product-name">貴級油膏</div><div class="product-price">$150</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '富級油膏', 198)">
+                <div class="check-mark">✔</div><div class="product-name">富級油膏</div><div class="product-price">$198</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '壺底蔭油膏', 310)">
+                <div class="check-mark">✔</div><div class="product-name">壺底蔭油膏</div><div class="product-price">$310</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-section">
+        <div class="category-title">4. 天然純釀_進口黑豆 (清醬油)</div>
+        <div class="category-desc">天然純釀醬油系列依原汁比例區分等級。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '貴級清油', 150)">
+                <div class="check-mark">✔</div><div class="product-name">貴級清油</div><div class="product-price">$150</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '生抽壺底油', 310)">
+                <div class="check-mark">✔</div><div class="product-name">生抽壺底油</div><div class="product-price">$310</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-section">
+        <div class="category-title">5. 天然純釀 (台灣本土黑豆)</div>
+        <div class="category-desc">採用友善環境種植的台灣本土黑豆。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '本土黑豆油膏', 198)">
+                <div class="check-mark">✔</div><div class="product-name">本土黑豆油膏</div><div class="product-price">$198</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '本土黑豆清油', 198)">
+                <div class="check-mark">✔</div><div class="product-name">本土黑豆清油</div><div class="product-price">$198</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '無加糖臺灣黑豆醬油', 198)">
+                <div class="check-mark">✔</div><div class="product-name">無加糖臺灣黑豆醬油</div><div class="product-price">$198</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-section">
+        <div class="category-title">6. 辣醬油膏</div>
+        <div class="category-desc">嚴選天然雞心辣椒粉。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '辣醬油膏', 100)">
+                <div class="check-mark">✔</div><div class="product-name">辣醬油膏</div><div class="product-price">$100</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '辣醬油膏 (隨身瓶)', 70)">
+                <div class="check-mark">✔</div><div class="product-name">辣醬油膏 (隨身瓶)</div><div class="product-price">$70</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-section">
+        <div class="category-title">7. 手工純釀醬菜</div>
+        <div class="category-desc">精選天然食材製作。</div>
+        <div class="product-grid">
+            <div class="product-card" onclick="selectProduct(this, '薑油 (經典瓶)', 270)">
+                <div class="check-mark">✔</div><div class="product-name">薑油 (經典瓶)</div><div class="product-price">$270</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '薑油 (隨身瓶)', 170)">
+                <div class="check-mark">✔</div><div class="product-name">薑油 (隨身瓶)</div><div class="product-price">$170</div>
+            </div>
+            <div class="product-card" onclick="selectProduct(this, '蔭豉', 95)">
+                <div class="check-mark">✔</div><div class="product-name">蔭豉</div><div class="product-price">$95</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="order-panel">
+        <div class="input-group"><input type="text" id="selectedName" readonly placeholder="選品項" style="width:90px;"></div>
+        <div class="input-group"><input type="text" id="buyerName" placeholder="姓名" style="width:75px;"></div>
+        <div class="input-group"><label>量</label><input type="number" id="buyQty" min="1" value="1" style="width: 45px;"></div>
+        <div class="input-group"><input type="text" id="orderNote" placeholder="備註(如:修改舊單)" style="flex-grow:1;"></div>
+        <button class="btn-add" onclick="addOrder()">加入</button>
+    </div>
+
+    <div class="instruction-box">
+        <strong>📝 訂單修改步驟：</strong> 1.若發現錯誤，請<strong>重新下單</strong>。 2.在備註註明 <strong>"修改舊單"</strong>。 3.<strong>同工</strong>在採購時會以有備註的最新訂單為準，並刪除舊單。
+    </div>
+
+    <h3>📝 本次準備送出的清單</h3>
+    <table>
+        <thead><tr><th>人</th><th>品項</th><th>量</th><th>備註</th><th>操作</th></tr></thead>
+        <tbody id="orderList"></tbody>
+    </table>
+
+    <div class="summary-box">
+        <div>總瓶數：<span id="totalBottles">0</span> 瓶</div>
+        <div id="discountInfo" style="color: green; display: none;">符合 1,500 元 85 折：-NT$ <span id="discountAmt">0</span></div>
+        <hr>
+        <div class="final-total">本次支付：NT$ <span id="finalTotal">0</span></div>
+    </div>
+
+    <button id="submitBtn" class="btn-submit" onclick="uploadToGoogle()">✅ 確認資料無誤，送出訂單</button>
+
+    <div class="history-section">
+        <h3>📋 已成功下單總表 (正式紀錄)</h3>
+        <button onclick="fetchHistory()" style="margin-bottom: 10px; cursor: pointer;">🔄 刷新紀錄</button>
+        <table>
+            <thead>
+                <tr><th width="15%">人</th><th width="35%">品項</th><th width="10%">量</th><th width="25%">備註</th><th width="15%">時間</th></tr>
+            </thead>
+            <tbody id="historyList">
+                <tr><td colspan="5">載入中...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // 已更新為您提供的最新 SCRIPT_URL
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzketijpUZL2YA9NPHigcM0L0-4eIhayg-aSV2Pvfho-1qAtvWwflEzoBPDHrapDK7O-g/exec';
+
+    let selectedPrice = 0;
+    let orders = [];
+
+    function selectProduct(element, name, price) {
+        document.querySelectorAll('.product-card').forEach(card => card.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('selectedName').value = name;
+        selectedPrice = price;
+    }
+
+    function addOrder() {
+        const pName = document.getElementById('selectedName').value;
+        const bName = document.getElementById('buyerName').value.trim();
+        const note = document.getElementById('orderNote').value.trim();
+        const qty = parseInt(document.getElementById('buyQty').value);
+        if (!pName || !bName) { alert("請選品項並填姓名"); return; }
+        orders.push({ bName, pName, price: selectedPrice, qty, note });
+        renderTable();
+        calculate();
+        document.getElementById('orderNote').value = "";
+    }
+
+    function deleteOrder(index) {
+        orders.splice(index, 1);
+        renderTable();
+        calculate();
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('orderList');
+        tbody.innerHTML = "";
+        orders.forEach((o, index) => {
+            const row = tbody.insertRow();
+            row.innerHTML = `<td>${o.bName}</td><td>${o.pName}</td><td>${o.qty}</td><td class="note-text">${o.note}</td><td><button class="btn-del" onclick="deleteOrder(${index})">刪除</button></td>`;
+        });
+    }
+
+    function calculate() {
+        let rawTotal = 0, totalQty = 0;
+        orders.forEach(o => { rawTotal += (o.price * o.qty); totalQty += o.qty; });
+        let discount = (rawTotal >= 1500) ? Math.round(rawTotal * 0.15) : 0;
+        document.getElementById('discountInfo').style.display = (discount > 0) ? "block" : "none";
+        document.getElementById('discountAmt').innerText = discount.toLocaleString();
+        document.getElementById('totalBottles').innerText = totalQty;
+        document.getElementById('finalTotal').innerText = (rawTotal - discount).toLocaleString();
+    }
+
+    function fetchHistory() {
+        const historyBody = document.getElementById('historyList');
+        // 增加一個隨機參數防止快取
+        fetch(SCRIPT_URL + "?nocache=" + new Date().getTime())
+            .then(res => res.json())
+            .then(data => {
+                historyBody.innerHTML = "";
+                if (!data || data.length === 0) {
+                    historyBody.innerHTML = "<tr><td colspan='5'>無正式紀錄</td></tr>";
+                    return;
+                }
+                data.reverse().forEach(o => {
+                    const row = historyBody.insertRow();
+                    const date = new Date(o.time).toLocaleString('zh-TW', {month:'numeric', day:'numeric', hour:'numeric', minute:'numeric'});
+                    row.innerHTML = `<td>${o.bName}</td><td>${o.pName}</td><td>${o.qty}</td><td class="note-text">${o.note}</td><td><small>${date}</small></td>`;
+                });
+            })
+            .catch(err => { 
+                console.error(err);
+                historyBody.innerHTML = "<tr><td colspan='5'>載入失敗，請確認 Apps Script 部署設為「所有人」</td></tr>"; 
+            });
+    }
+
+    function uploadToGoogle() {
+        if (orders.length === 0) return;
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "傳送中...";
+        btn.disabled = true;
+        const data = orders.map(o => ({ bName: o.bName, pName: o.pName, qty: o.qty, subtotal: o.price * o.qty, note: o.note }));
+        fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
+        .then(() => {
+            alert("送出成功！");
+            orders = []; renderTable(); calculate(); fetchHistory();
+            btn.innerText = "✅ 確認資料無誤，送出訂單"; btn.disabled = false;
+        }).catch(() => {
+            alert("傳送失敗");
+            btn.disabled = false;
+        });
+    }
+
+    window.onload = fetchHistory;
+</script>
+</body>
+</html>
