@@ -22,19 +22,25 @@
         .check-mark { position: absolute; top: 5px; right: 8px; color: var(--main-brown); display: none; font-size: 1.2em; }
         .product-card.selected .check-mark { display: block; }
 
-        .order-panel { background: #fdf5e6; padding: 15px; border-radius: 10px; border-left: 8px solid var(--main-brown); display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 25px; }
+        /* 訂購操作區 */
+        .order-panel { background: #fdf5e6; padding: 15px; border-radius: 10px; border-left: 8px solid var(--main-brown); display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
         .input-group { display: flex; align-items: center; gap: 5px; }
         input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
         .btn-add { background: var(--main-brown); color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-weight: bold; flex-grow: 1; height: 42px; }
-        
+
+        /* 個人即時明細預覽 */
+        .personal-preview { background: #fffde7; padding: 15px; border: 1px dashed #fbc02d; border-radius: 8px; margin-bottom: 25px; display: none; }
+        .preview-title { font-weight: bold; color: #f57f17; margin-bottom: 5px; border-bottom: 1px solid #fff59d; }
+
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95em; }
         th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
         th { background-color: var(--main-brown); color: white; }
-        .btn-del { background: #e53935; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+        .btn-del { background: #e53935; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85em; }
         
         .summary-box { margin-top: 25px; text-align: right; background: #f9f9f9; padding: 20px; border-radius: 10px; border: 1px solid #eee; }
         .final-total { color: #d32f2f; font-size: 1.8em; font-weight: bold; margin-top: 5px; }
         .btn-submit { background: #2e7d32; color: white; border: none; padding: 18px; border-radius: 8px; font-size: 1.3em; cursor: pointer; display: block; margin: 25px auto; width: 100%; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .hint { font-size: 0.8em; color: #888; text-align: center; margin-top: -15px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -118,7 +124,7 @@
 
     <div class="category-section">
         <div class="category-title">6. 辣醬油膏</div>
-        <div class="category-desc">源和辣醬油膏嚴選天然雞心辣椒粉，與日曝六個月以上、古法釀造的黑豆醬油膏一同慢火熬煮而成。全程不添加人工色素、香料與防腐劑，保留自然的甘醇與溫潤辣味，純素也能安心食用。無論是蘿蔔糕、粽子、乾麵、鍋貼、水餃或蛋餅，搭配源和辣醬油膏，美味瞬間升級。不只是好吃，更讓你安心，是廚房裡會讓人一再回購的老朋友。</div>
+        <div class="category-desc">源和辣醬油膏嚴選天然雞心辣椒粉，與日曝六個月以上、古法釀造的黑豆醬油膏一同慢火熬煮而成。全程不添加人工色素、香料與防腐劑，保留自然的甘醇與溫潤辣味，純素也能安心食用。</div>
         <div class="product-grid">
             <div class="product-card" onclick="selectProduct(this, '辣醬油膏', 100)">
                 <div class="check-mark">✔</div><div class="product-name">辣醬油膏</div><div class="product-price">$100</div>
@@ -146,14 +152,21 @@
     </div>
 
     <div class="order-panel">
-        <div class="input-group"><input type="text" id="selectedName" readonly placeholder="請點選品項"></div>
-        <div class="input-group"><input type="text" id="buyerName" placeholder="姓名"></div>
+        <div class="input-group"><input type="text" id="selectedName" readonly placeholder="請選品項"></div>
+        <div class="input-group"><input type="text" id="buyerName" placeholder="輸入您的姓名" oninput="updatePersonalPreview()"></div>
         <div class="input-group"><label>數量</label><input type="number" id="buyQty" min="1" value="1" style="width: 60px;"></div>
         <button class="btn-add" onclick="addOrder()">加入統計</button>
     </div>
+    <p class="hint">※ 姓名必須正確，才能在下方預覽您的個人訂單</p>
 
+    <div id="personalPreview" class="personal-preview">
+        <div class="preview-title">🔍 <span id="previewName"></span> 的即時訂購預覽：</div>
+        <div id="previewContent"></div>
+    </div>
+
+    <h3>📊 團購統計總明細</h3>
     <table>
-        <thead><tr><th>訂購人</th><th>品項</th><th>數量</th><th>小計</th><th>操作</th></tr></thead>
+        <thead><tr><th>訂購人</th><th>品項</th><th>數量</th><th>小計</th><th>修改/刪除</th></tr></thead>
         <tbody id="orderList"></tbody>
     </table>
 
@@ -164,7 +177,7 @@
         <div class="final-total">應付總計：NT$ <span id="finalTotal">0</span></div>
     </div>
 
-    <button id="submitBtn" class="btn-submit" onclick="uploadToGoogle()">✅ 確認下單並傳送資料</button>
+    <button id="submitBtn" class="btn-submit" onclick="uploadToGoogle()">✅ 確認資料無誤，送出訂單</button>
 </div>
 
 <script>
@@ -183,17 +196,20 @@
         const pName = document.getElementById('selectedName').value;
         const bName = document.getElementById('buyerName').value.trim();
         const qty = parseInt(document.getElementById('buyQty').value);
-        if (!pName || !bName) { alert("請選品項並填寫姓名"); return; }
+        if (!pName || !bName) { alert("請先點選醬油品項並輸入您的姓名"); return; }
         orders.push({ bName, pName, price: selectedPrice, qty });
         renderTable();
         calculate();
-        document.getElementById('buyerName').value = bName; 
+        updatePersonalPreview();
     }
 
     function deleteOrder(index) {
-        orders.splice(index, 1);
-        renderTable();
-        calculate();
+        if(confirm("確定要修改/刪除這筆訂單嗎？")) {
+            orders.splice(index, 1);
+            renderTable();
+            calculate();
+            updatePersonalPreview();
+        }
     }
 
     function renderTable() {
@@ -201,8 +217,30 @@
         tbody.innerHTML = "";
         orders.forEach((o, index) => {
             const row = tbody.insertRow();
-            row.innerHTML = `<td>${o.bName}</td><td>${o.pName}</td><td>${o.qty}</td><td>$${(o.price * o.qty).toLocaleString()}</td><td><button class="btn-del" onclick="deleteOrder(${index})">刪除</button></td>`;
+            row.innerHTML = `<td>${o.bName}</td><td>${o.pName}</td><td>${o.qty}</td><td>$${(o.price * o.qty).toLocaleString()}</td><td><button class="btn-del" onclick="deleteOrder(${index})">修改/刪除</button></td>`;
         });
+    }
+
+    // 即時預覽功能：根據輸入的姓名顯示該人的清單
+    function updatePersonalPreview() {
+        const bName = document.getElementById('buyerName').value.trim();
+        const previewDiv = document.getElementById('personalPreview');
+        const contentDiv = document.getElementById('previewContent');
+        const previewNameSpan = document.getElementById('previewName');
+
+        if (!bName) {
+            previewDiv.style.display = "none";
+            return;
+        }
+
+        const myOrders = orders.filter(o => o.bName === bName);
+        if (myOrders.length > 0) {
+            previewDiv.style.display = "block";
+            previewNameSpan.innerText = bName;
+            contentDiv.innerHTML = myOrders.map(o => `· ${o.pName} x ${o.qty}`).join('<br>');
+        } else {
+            previewDiv.style.display = "none";
+        }
     }
 
     function calculate() {
@@ -216,18 +254,18 @@
     }
 
     function uploadToGoogle() {
-        if (orders.length === 0) { alert("尚未加入品項"); return; }
+        if (orders.length === 0) { alert("清單中還沒有品項喔！"); return; }
         const btn = document.getElementById('submitBtn');
-        btn.innerText = "資料傳送中...";
+        btn.innerText = "訂單傳送中...";
         btn.disabled = true;
         const data = orders.map(o => ({ bName: o.bName, pName: o.pName, qty: o.qty, subtotal: o.price * o.qty }));
         fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
         .then(() => {
-            alert("下單成功！資料已彙整至後台。");
-            orders = []; renderTable(); calculate();
-            btn.innerText = "✅ 確認下單並傳送資料"; btn.disabled = false;
+            alert("訂單已成功送出！感謝您的訂購。");
+            orders = []; renderTable(); calculate(); updatePersonalPreview();
+            btn.innerText = "✅ 確認資料無誤，送出訂單"; btn.disabled = false;
         }).catch(() => {
-            alert("傳送失敗");
+            alert("傳送失敗，請檢查網路連線後再試一次。");
             btn.disabled = false;
         });
     }
